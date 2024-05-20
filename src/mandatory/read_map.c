@@ -6,7 +6,7 @@
 /*   By: tgrekov <tgrekov@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 07:22:24 by tgrekov           #+#    #+#             */
-/*   Updated: 2024/05/20 09:27:24 by tgrekov          ###   ########.fr       */
+/*   Updated: 2024/05/20 10:29:13 by tgrekov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,21 @@
 #include <get_next_line_bonus.h>
 #include "utils/utils.h"
 #include "utils/map.h"
+
+static int	map_file(char *filename)
+{
+	int	filename_len;
+	int	fd;
+
+	filename_len = ft_strlen(filename);
+	if (filename_len < 5 || ft_strncmp(".fdf", filename + filename_len - 4, 4))
+	{
+		ft_printf("%>Expected file name to end in .fdf\n", 2);
+		return (-1);
+	}
+	fd = open(filename, O_RDONLY);
+	return (fd);
+}
 
 static void	split_rows(int fd, t_list **lst)
 {
@@ -71,22 +86,17 @@ static void	fill_points(t_map *map, t_list *lst)
 
 t_map	read_map(char *filename)
 {
-	int		filename_len;
 	int		fd;
 	t_list	*lst;
 	t_map	map;
 
 	map.point = 0;
-	filename_len = ft_strlen(filename);
-	if (filename_len < 5 || ft_strncmp(".fdf", filename + filename_len - 4, 4))
-	{
-		ft_printf("%>Expected file name to end in .fdf\n", 2);
-		return (map);
-	}
-	fd = open(filename, O_RDONLY);
+	fd = map_file(filename);
 	if (fd == -1)
-		return (*(t_map *) err("open() failed:", &map));
+		return (map);
 	split_rows(fd, &lst);
+	if (close(fd) == -1)
+		return (*(t_map *) err("close() failed:", &map));
 	if (!lst)
 		return (map);
 	map.length = arr_len(lst->content);

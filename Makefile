@@ -16,12 +16,14 @@ MLX = $(MLX_DIR)/build/libmlx42.a
 SRC_NAMES_SHARED =
 SRC_NAMES_MANDATORY =	main.c				\
 						read_map.c			\
+						fdf.c				\
 						utils/err.c			\
 						utils/arr_len.c		\
 						utils/arr_free.c
 SRC_NAMES_BONUS =
 
 CC = cc
+CC_EXT_SRCS = $(LIBFT) $(MLX) -lglfw -L"/Users/$(USER)/.brew/opt/glfw/lib/"
 FLAGS = -I$(INC_DIR) -Wall -Wextra -Werror
 DEBUG_FLAGS = -I$(INC_DIR) -g -fsanitize=address,undefined,integer
 
@@ -41,6 +43,8 @@ clean .clean fclean re
 
 ################################################################################
 
+all: $(NAME)
+
 $(OBJ_DIR)/debug/%.o: $(SRC_DIR)/%.c
 	@mkdir -p $(dir $@)
 	@echo "$(GREY)$(NAME) $(DEFAULT)| $(GREEN)$< $(PURPLE)$(DEBUG_FLAGS) $(RED)> $(GREY)$@$(DEFAULT)"
@@ -53,16 +57,22 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 
 ################################################################################
 
-all: $(NAME)
-
-$(NAME): $(OBJS_SHARED) $(OBJS_MANDATORY)
+$(LIBFT):
 	@make -C $(LIBFT_DIR) bonus
-	@$(CC) $(FLAGS) $(LIBFT) $(OBJS_SHARED) $(OBJS_MANDATORY) -o $(NAME)
+
+$(MLX):
+	@git clone https://github.com/codam-coding-college/MLX42.git $(MLX_DIR)
+	@cmake $(MLX_DIR) -B $(MLX_DIR)/build
+	@make -C $(MLX_DIR)/build -j4
+
+################################################################################
+
+$(NAME): $(LIBFT) $(MLX) $(OBJS_SHARED) $(OBJS_MANDATORY)
+	@$(CC) $(FLAGS) $(CC_EXT_SRCS) $(OBJS_SHARED) $(OBJS_MANDATORY) -o $(NAME)
 	@echo "$(GREY)$(NAME) $(DEFAULT)| $(GREEN)Mandatory done$(DEFAULT)"
 
-.bonus: $(OBJS_SHARED) $(OBJS_BONUS)
-	@make -C $(LIBFT_DIR) bonus
-	@$(CC) $(FLAGS) $(LIBFT) $(OBJS_SHARED) $(OBJS_BONUS) -o $(NAME)
+.bonus: $(LIBFT) $(MLX) $(OBJS_SHARED) $(OBJS_BONUS)
+	@$(CC) $(FLAGS) $(CC_EXT_SRCS) $(OBJS_SHARED) $(OBJS_BONUS) -o $(NAME)
 	@touch .bonus
 	@echo "$(GREY)$(NAME) $(DEFAULT)| $(GREEN)Bonus done$(DEFAULT)"
 
@@ -70,14 +80,12 @@ bonus: .bonus
 
 ################################################################################
 
-$(DEBUG_NAME): $(OBJS_SHARED_DEBUG) $(OBJS_MANDATORY_DEBUG)
-	@make -C $(LIBFT_DIR) bonus
-	@$(CC) $(DEBUG_FLAGS) $(LIBFT) $(OBJS_SHARED_DEBUG) $(OBJS_MANDATORY_DEBUG) -o $(DEBUG_NAME)
+$(DEBUG_NAME): $(LIBFT) $(MLX) $(OBJS_SHARED_DEBUG) $(OBJS_MANDATORY_DEBUG)
+	@$(CC) $(DEBUG_FLAGS) $(CC_EXT_SRCS) $(OBJS_SHARED_DEBUG) $(OBJS_MANDATORY_DEBUG) -o $(DEBUG_NAME)
 	@echo "$(GREY)$(NAME) $(DEBUG_NAME) $(DEFAULT)| $(GREEN)Mandatory done$(DEFAULT)"
 
-.debug_bonus: $(OBJS_SHARED_DEBUG) $(OBJS_BONUS_DEBUG)
-	@make -C $(LIBFT_DIR) bonus
-	@$(CC) $(DEBUG_FLAGS) $(LIBFT) $(OBJS_SHARED_DEBUG) $(OBJS_BONUS_DEBUG) -o $(DEBUG_NAME)
+.debug_bonus: $(LIBFT) $(MLX) $(OBJS_SHARED_DEBUG) $(OBJS_BONUS_DEBUG)
+	@$(CC) $(DEBUG_FLAGS) $(CC_EXT_SRCS) $(OBJS_SHARED_DEBUG) $(OBJS_BONUS_DEBUG) -o $(DEBUG_NAME)
 	@touch .bonus
 	@echo "$(GREY)$(NAME) $(DEBUG_NAME) $(DEFAULT)| $(GREEN)Bonus done$(DEFAULT)"
 
