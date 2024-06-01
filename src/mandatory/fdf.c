@@ -6,13 +6,15 @@
 /*   By: tgrekov <tgrekov@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 10:38:21 by tgrekov           #+#    #+#             */
-/*   Updated: 2024/05/20 12:02:37 by tgrekov          ###   ########.fr       */
+/*   Updated: 2024/06/01 08:09:53 by tgrekov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <math.h>
 #include <MLX42.h>
 #include <libft.h>
 #include <ft_printf.h>
+#include "fdf.h"
 #include "utils/map.h"
 
 static void	keyhook(mlx_key_data_t key_data, void *arg)
@@ -21,24 +23,102 @@ static void	keyhook(mlx_key_data_t key_data, void *arg)
 		mlx_close_window((mlx_t *) arg);
 }
 
+static void	bresenham(mlx_image_t *img, int *offset, int *p1, int *p2)
+{
+	int	x;
+	int	y;
+	int	m;
+	int	serr;
+
+	m = 2 * (p2[1] - p1[1]);
+	serr = m - (p2[0] - p1[0]);
+	x = p1[0];
+	y = p1[1];
+	mlx_put_pixel(img, x + offset[0], y + offset[1], 0xFF0000FF);
+	return ;
+	while (x <= p2[0])
+	{
+		ft_printf("%d %d\n", x, y);
+		mlx_put_pixel(img, x + offset[0], y + offset[1], 0xFF0000FF);
+		serr += m;
+		if (serr >= 0)
+		{
+			y++;
+			serr -= 2 * (p2[0] - p1[0]);
+		}
+		x++;
+	}
+}
+
+static void	project(t_map map)
+{
+	int				x;
+	int				y;
+
+	y = 0;
+	while (y < map.height)
+	{
+		x = 0;
+		while (x < map.width)
+		{
+			map.point[y][x].projected[0]
+				= (x - y) * FDF_SCALE * cos(30 * M_PI / 180);
+			map.point[y][x].projected[1]
+				= (x + y) * FDF_SCALE * sin(30 * M_PI / 180)
+				- map.point[y][x].height;
+			x++;
+		}
+		y++;
+	}
+}
+
+static void	mklines(t_map map, mlx_image_t *img)
+{
+	int	x;
+	int	y;
+	int	offset[2];
+
+	project(map);
+	ft_printf("%d\n", map.width);
+	offset[0] = FDF_WIDTH / 2 - (map.point[0][map.width - 1].projected[0] - map.point[map.height - 1][1].projected[0]) / 4;
+	offset[1] = map.point[map.height - 1][map.width - 1].projected[0] - map.point[0][0].projected[0];
+	y = 0;
+	while (y < map.height)
+	{
+		x = 0;
+		while (x < map.width)
+		{
+			if (x + 1 < map.width)
+				bresenham(img, offset,
+					map.point[y][x].projected, map.point[y][x + 1].projected);
+			if (y + 1 < map.height)
+				bresenham(img, offset,
+					map.point[y][x].projected, map.point[y + 1][x].projected);
+			x++;
+		}
+		y++;
+	}
+}
+
+
 int	fdf(t_map map)
 {
 	mlx_t		*mlx;
 	mlx_image_t	*img;
 
-	(void) map;
-	mlx = mlx_init(1366, 768, "Gungus", true);
+	mlx = mlx_init(FDF_WIDTH, FDF_HEIGHT, "Gungus", true);
 	if (!mlx)
 	{
 		ft_printf("%>mlx_init() failed:%s\n", 2, mlx_strerror(mlx_errno));
 		return (1);
 	}
-	img = mlx_new_image(mlx, 1366, 768);
+	img = mlx_new_image(mlx, FDF_WIDTH, FDF_HEIGHT);
 	if (!img)
 	{
 		ft_printf("%>mlx_new_image() failed:%s\n", 2, mlx_strerror(mlx_errno));
 		return (1);
 	}
+	mklines(map, img);
 	if (mlx_image_to_window(mlx, img, 0, 0) == -1)
 	{
 		ft_printf("%>mlx_image_to_window() failed:%s\n", 2, mlx_strerror(mlx_errno));

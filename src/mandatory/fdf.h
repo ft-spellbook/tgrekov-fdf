@@ -1,29 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   map.h                                              :+:      :+:    :+:   */
+/*   fdf.h                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tgrekov <tgrekov@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/20 08:48:52 by tgrekov           #+#    #+#             */
-/*   Updated: 2024/06/01 04:50:11 by tgrekov          ###   ########.fr       */
+/*   Created: 2024/06/01 04:16:10 by tgrekov           #+#    #+#             */
+/*   Updated: 2024/06/01 07:58:29 by tgrekov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MAP_H
-# define MAP_H
+#ifndef FDF_H
+# define FDF_H
 
-typedef struct s_point
-{
-	int	height;
-	int	projected[2];
-}		t_point;
+# ifndef FDF_WIDTH
+#  define FDF_WIDTH 1366
+# endif //FDF_WIDTH
 
-typedef struct s_map
-{
-	int		width;
-	int		height;
-	t_point	**point;
-}		t_map;
+# ifndef FDF_HEIGHT
+#  define FDF_HEIGHT 768
+# endif //FDF_HEIGHT
 
-#endif
+# ifndef FDF_SCALE
+#  define FDF_SCALE 30
+# endif //FDF_SCALE
+
+#endif //FDF_H

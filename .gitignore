@@ -5,6 +5,8 @@
 !*.h
 !Makefile
 !.github/workflows/doxygen-pages.yml
+!project_summary.dox
+!LICENSE
 docs/
 objs/
 .vscode/

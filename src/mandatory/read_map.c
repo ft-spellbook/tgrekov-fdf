@@ -6,7 +6,7 @@
 /*   By: tgrekov <tgrekov@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 07:22:24 by tgrekov           #+#    #+#             */
-/*   Updated: 2024/05/20 10:29:13 by tgrekov          ###   ########.fr       */
+/*   Updated: 2024/06/01 05:14:40 by tgrekov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,27 @@ static void	split_rows(int fd, t_list **lst)
 	}
 }
 
+static int	check_width(t_list *lst, t_map *map)
+{
+	int	tmp;
+
+	map->width = 0;
+	map->height = 0;
+	while (lst)
+	{
+		tmp = arr_len(lst->content);
+		if (map->width && tmp != map->width)
+		{
+			ft_printf("%>Inconsistent row width\n", 2);
+			return (1);
+		}
+		map->height++;
+		map->width = tmp;
+		lst = lst->next;
+	}
+	return (0);
+}
+
 static void	fill_points(t_map *map, t_list *lst)
 {
 	int	x;
@@ -71,14 +92,17 @@ static void	fill_points(t_map *map, t_list *lst)
 	while (lst)
 	{
 		x = 0;
-		map->point[y] = malloc(sizeof(int) * map->length);
+		map->point[y] = malloc(sizeof(t_point) * map->width);
 		if (!map->point[y])
 		{
 			arr_free((void **) map->point);
 			return (perror("malloc() failed:"));
 		}
-		while (x++ < map->length)
-			map->point[y][x - 1] = ft_atoi(((char **) lst->content)[x - 1]);
+		while (x < map->width)
+		{
+			map->point[y][x].height = ft_atoi(((char **) lst->content)[x]);
+			x++;
+		}
 		y++;
 		lst = lst->next;
 	}
@@ -86,9 +110,9 @@ static void	fill_points(t_map *map, t_list *lst)
 
 t_map	read_map(char *filename)
 {
+	t_map	map;
 	int		fd;
 	t_list	*lst;
-	t_map	map;
 
 	map.point = 0;
 	fd = map_file(filename);
@@ -99,8 +123,9 @@ t_map	read_map(char *filename)
 		return (*(t_map *) err("close() failed:", &map));
 	if (!lst)
 		return (map);
-	map.length = arr_len(lst->content);
-	map.point = ft_calloc(ft_lstsize(lst) + 1, sizeof(int *));
+	if (check_width(lst, &map))
+		return (map);
+	map.point = ft_calloc(map.height + 1, sizeof(t_point **));
 	if (!map.point)
 		return (*(t_map *) err("malloc() failed:", &map));
 	fill_points(&map, lst);
