@@ -6,7 +6,7 @@
 /*   By: tgrekov <tgrekov@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 10:38:21 by tgrekov           #+#    #+#             */
-/*   Updated: 2024/06/09 00:12:34 by tgrekov          ###   ########.fr       */
+/*   Updated: 2024/06/09 00:21:51 by tgrekov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,6 @@ static void	keyhook(mlx_key_data_t key_data, void *arg)
 		mlx_close_window((mlx_t *) arg);
 }
 
-static int	viewport_check(int x, int y)
-{
-	return (x >= 0 && x < FDF_WIDTH && y >= 0 && y < FDF_HEIGHT);
-}
-
 static void	bresenham(mlx_image_t *img, int *offset, int *p1, int *p2)
 {
 	int	x;
@@ -39,8 +34,7 @@ static void	bresenham(mlx_image_t *img, int *offset, int *p1, int *p2)
 	y = p1[1];
 	while (1)
 	{
-		if (viewport_check(x - offset[0], y - offset[1]))
-			mlx_put_pixel(img, x - offset[0], y - offset[1], 0xFF0000FF);
+		mlx_put_pixel(img, x - offset[0], y - offset[1], 0xFF0000FF);
 		if ((err * 2 >= -abs(p2[1] - p1[1]) && x == p2[0])
 			|| (err * 2 <= abs(p2[0] - p1[0]) && y == p2[1]))
 			break ;
