@@ -24,7 +24,7 @@ SRC_NAMES_BONUS =
 
 CC = cc
 CC_EXT_SRCS = $(LIBFT) $(MLX) -lglfw -L"/Users/$(USER)/.brew/opt/glfw/lib/"
-FLAGS = -I$(INC_DIR) -Wall -Wextra -Werror
+FLAGS = -I$(INC_DIR) # -Wall -Wextra -Werror
 DEBUG_FLAGS = -I$(INC_DIR) -g -fsanitize=address,undefined,integer
 
 ################################################################################

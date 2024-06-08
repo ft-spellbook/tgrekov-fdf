@@ -6,7 +6,7 @@
 /*   By: tgrekov <tgrekov@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 04:16:10 by tgrekov           #+#    #+#             */
-/*   Updated: 2024/06/01 07:58:29 by tgrekov          ###   ########.fr       */
+/*   Updated: 2024/06/08 03:08:29 by tgrekov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,14 +15,18 @@
 
 # ifndef FDF_WIDTH
 #  define FDF_WIDTH 1366
-# endif //FDF_WIDTH
+# endif 
 
 # ifndef FDF_HEIGHT
 #  define FDF_HEIGHT 768
-# endif //FDF_HEIGHT
+# endif 
 
-# ifndef FDF_SCALE
-#  define FDF_SCALE 30
-# endif //FDF_SCALE
+# ifndef FDF_HORIZONTAL_SCALE
+#  define FDF_HORIZONTAL_SCALE 30
+# endif 
 
-#endif //FDF_H
+# ifndef FDF_VERTICAL_SCALE
+#  define FDF_VERTICAL_SCALE 2
+# endif 
+
+#endif 
