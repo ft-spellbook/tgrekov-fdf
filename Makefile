@@ -58,12 +58,12 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 ################################################################################
 
 $(LIBFT):
-	@make -C $(LIBFT_DIR) bonus
+	@make --no-print-directory -C $(LIBFT_DIR) bonus
 
 $(MLX):
 	@git clone https://github.com/codam-coding-college/MLX42.git $(MLX_DIR)
 	@cmake $(MLX_DIR) -B $(MLX_DIR)/build
-	@make -C $(MLX_DIR)/build -j4
+	@make --no-print-directory -C $(MLX_DIR)/build -j4
 
 ################################################################################
 
@@ -100,10 +100,10 @@ debug_bonus: .debug_bonus
 	@rm -rf $(OBJ_DIR) .bonus .debug_bonus
 
 clean: .clean
-	@make -C $(LIBFT_DIR) clean
+	@make --no-print-directory -C $(LIBFT_DIR) clean
 	
 fclean: .clean
-	@make -C $(LIBFT_DIR) fclean
+	@make --no-print-directory -C $(LIBFT_DIR) fclean
 	@echo "$(GREY)$(NAME) $(DEFAULT)| $(RED)Removing $(DEFAULT)$(NAME) and $(DEBUG_NAME)"
 	@rm -f $(NAME) $(DEBUG_NAME)
 

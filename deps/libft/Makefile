@@ -75,13 +75,13 @@ $(OBJ_DIR)%.o: $(SRC_DIR)%.c
 all: $(NAME)
 
 $(NAME): $(OBJS_SHARED) $(OBJS_MANDATORY)
-	@make -C ft_printf bonus
+	@make --no-print-directory -C ft_printf bonus
 	@cp ft_printf/libftprintf.a $(NAME)
 	@ar rcs $(NAME) $^
 	@echo "$(GREY)$(NAME) $(DEFAULT)| $(GREEN)Mandatory done$(DEFAULT)"
 
 .bonus: $(OBJS_SHARED) $(OBJS_BONUS)
-	@make -C ft_printf bonus
+	@make --no-print-directory -C ft_printf bonus
 	@cp ft_printf/libftprintf.a $(NAME)
 	@ar rcs $(NAME) $^
 	@touch .bonus
@@ -96,10 +96,10 @@ bonus: .bonus
 	@rm -rf $(OBJ_DIR) .bonus
 
 clean: .clean
-	@make -C ft_printf clean
+	@make --no-print-directory -C ft_printf clean
 	
 fclean: .clean
-	@make -C ft_printf fclean
+	@make --no-print-directory -C ft_printf fclean
 	@echo "$(GREY)$(NAME) $(DEFAULT)| $(RED)Removing $(DEFAULT)$(NAME)"
 	@rm -f $(NAME)
 
