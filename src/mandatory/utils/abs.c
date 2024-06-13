@@ -1,28 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   fdf.h                                              :+:      :+:    :+:   */
+/*   abs.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tgrekov <tgrekov@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/06/01 04:16:10 by tgrekov           #+#    #+#             */
-/*   Updated: 2024/06/13 08:52:39 by tgrekov          ###   ########.fr       */
+/*   Created: 2024/06/13 08:18:39 by tgrekov           #+#    #+#             */
+/*   Updated: 2024/06/13 08:19:06 by tgrekov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef FDF_H
-# define FDF_H
-
-# ifndef FDF_MAX_WIDTH
-#  define FDF_MAX_WIDTH 3840
-# endif 
-
-# ifndef FDF_MAX_HEIGHT
-#  define FDF_MAX_HEIGHT 2160
-# endif 
-
-# ifndef FDF_MAX_SCALE
-#  define FDF_MAX_SCALE 50
-# endif
-
-#endif 
+int abs(int n)
+{
+    if (n < 0)
+        return (n * -1);
+    return (n);
+}

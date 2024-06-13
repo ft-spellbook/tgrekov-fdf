@@ -6,52 +6,20 @@
 /*   By: tgrekov <tgrekov@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 10:38:21 by tgrekov           #+#    #+#             */
-/*   Updated: 2024/06/09 00:21:51 by tgrekov          ###   ########.fr       */
+/*   Updated: 2024/06/13 08:56:17 by tgrekov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <math.h>
 #include <MLX42.h>
-#include <libft.h>
 #include <ft_printf.h>
 #include "fdf.h"
-#include "utils/map.h"
+#include "fdf/map.h"
 
-static void	keyhook(mlx_key_data_t key_data, void *arg)
-{
-	if (key_data.key == MLX_KEY_ESCAPE)
-		mlx_close_window((mlx_t *) arg);
-}
+void    iso(int *p_3d, int *p_2d);
+int 	fdf_mlx(t_map map, int *offset, int *size);
 
-static void	bresenham(mlx_image_t *img, int *offset, int *p1, int *p2)
-{
-	int	x;
-	int	y;
-	int	err;
-
-	err = abs(p2[0] - p1[0]) + -abs(p2[1] - p1[1]);
-	x = p1[0];
-	y = p1[1];
-	while (1)
-	{
-		mlx_put_pixel(img, x - offset[0], y - offset[1], 0xFF0000FF);
-		if ((err * 2 >= -abs(p2[1] - p1[1]) && x == p2[0])
-			|| (err * 2 <= abs(p2[0] - p1[0]) && y == p2[1]))
-			break ;
-		if (err * 2 >= -abs(p2[1] - p1[1]))
-		{
-			err += -abs(p2[1] - p1[1]);
-			x += (p1[0] < p2[0]) * 2 - 1;
-		}
-		if (err * 2 <= abs(p2[0] - p1[0]))
-		{
-			err += abs(p2[0] - p1[0]);
-			y += (p1[1] < p2[1]) * 2 - 1;
-		}
-	}
-}
-
-static void	project(t_map map)
+static void	project(t_map map, int scale)
 {
 	int	x;
 	int	y;
@@ -62,50 +30,19 @@ static void	project(t_map map)
 		x = 0;
 		while (x < map.width)
 		{
-			map.point[y][x].projected[0]
-				= (x - y) * FDF_HORIZONTAL_SCALE * cos(30 * M_PI / 180);
-			map.point[y][x].projected[1]
-				= (x + y) * FDF_HORIZONTAL_SCALE * sin(30 * M_PI / 180)
-				- map.point[y][x].height * FDF_VERTICAL_SCALE;
+			iso((int []){x * scale, y * scale, map.point[y][x].height * scale},
+				map.point[y][x].projected);
 			x++;
 		}
 		y++;
 	}
 }
 
-static void	mklines(t_map map, mlx_image_t *img, int *offset)
+static void	calc_offset(t_map map, int *offset)
 {
 	int	x;
 	int	y;
 
-	y = 0;
-	while (y < map.height)
-	{
-		x = 0;
-		while (x < map.width)
-		{
-			if (x + 1 < map.width)
-				bresenham(img, offset, map.point[y][x].projected,
-					map.point[y][x + 1].projected);
-			if (y + 1 < map.height)
-				bresenham(img, offset, map.point[y][x].projected,
-					map.point[y + 1][x].projected);
-			x++;
-		}
-		y++;
-	}
-}
-
-
-int	fdf(t_map map)
-{
-	mlx_t		*mlx;
-	mlx_image_t	*img;
-	int			offset[4];
-	int			x;
-	int			y;
-
-	project(map);
 	offset[0] = map.point[map.height - 1][0].projected[0];
 	offset[1] = 0;
 	y = 0;
@@ -120,41 +57,66 @@ int	fdf(t_map map)
 		}
 		y++;
 	}
-	offset[2] = map.point[0][map.width - 1].projected[0] - map.point[map.height - 1][0].projected[0];
-	offset[3] = 0;
+}
+
+static void	calc_size(t_map map, int *offset, int *size)
+{
+	int	x;
+	int	y;
+
+	size[0] = map.point[0][map.width - 1].projected[0] - map.point[map.height - 1][0].projected[0];
+	size[1] = 0;
 	y = 0;
 	while (y < map.height)
 	{
 		x = 0;
 		while (x < map.width)
 		{
-			if (map.point[y][x].projected[1] > offset[3])
-				offset[3] = map.point[y][x].projected[1];
+			if (map.point[y][x].projected[1] > size[1])
+				size[1] = map.point[y][x].projected[1];
 			x++;
 		}
 		y++;
 	}
-	offset[3] = offset[3] - offset[1];
-	mlx = mlx_init(offset[2], offset[3], "Gungus", 0);
-	if (!mlx)
+	size[1] = size[1] - offset[1] + 1;
+}
+
+static int	min(int a, int b)
+{
+	if (a < b)
+		return (a);
+	return (b);
+}
+
+static int	max(int a, int b)
+{
+	if (a > b)
+		return (a);
+	return (b);
+}
+
+static int	pythagorean(int a, int b)
+{
+	return (sqrt((a * a) + (b * b)));
+}
+
+int	fdf(t_map map)
+{
+	int			offset[2];
+	int			size[2];
+
+	project(map, max(1, min(FDF_MAX_SCALE, min(FDF_MAX_WIDTH, FDF_MAX_HEIGHT) / pythagorean(map.width, map.height))));
+	calc_offset(map, offset);
+	calc_size(map, offset, size);
+	/*if (size[0] > FDF_MAX_WIDTH)
 	{
-		ft_printf("%>mlx_init() failed:%s\n", 2, mlx_strerror(mlx_errno));
+		ft_printf("%>Map exceeds max width with scale %d\n", 2, FDF_SCALE);
 		return (1);
 	}
-	img = mlx_new_image(mlx, FDF_WIDTH, FDF_HEIGHT);
-	if (!img)
+	if (size[1] > FDF_MAX_HEIGHT)
 	{
-		ft_printf("%>mlx_new_image() failed:%s\n", 2, mlx_strerror(mlx_errno));
+		ft_printf("%>Map exceeds max height with scale %d\n", 2, FDF_SCALE);
 		return (1);
-	}
-	mklines(map, img, offset);
-	if (mlx_image_to_window(mlx, img, 0, 0) == -1)
-	{
-		ft_printf("%>mlx_image_to_window() failed:%s\n", 2, mlx_strerror(mlx_errno));
-		return (1);
-	}
-	mlx_key_hook(mlx, keyhook, mlx);
-	mlx_loop(mlx);
-	mlx_terminate(mlx);
-	return (0);
+	}*/
+	return (fdf_mlx(map, offset, size));
 }

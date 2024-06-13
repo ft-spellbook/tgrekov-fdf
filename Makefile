@@ -8,13 +8,17 @@ DEP_DIR = deps
 LIB_DIR = libs
 
 LIBFT_DIR = $(DEP_DIR)/libft
-LIBFT = $(LIBFT_DIR)/libft.a
+LIBFT = $(LIB_DIR)/libft.a
 MLX_DIR = $(DEP_DIR)/MLX42
-MLX = $(MLX_DIR)/build/libmlx42.a
+MLX = $(LIB_DIR)/libmlx42.a
 
 SRC_NAMES =	main.c				\
 			read_map.c			\
 			fdf.c				\
+			fdf/iso.c			\
+			fdf/fdf_mlx.c		\
+			fdf/draw_line.c		\
+			utils/abs.c			\
 			utils/err.c			\
 			utils/arr_len.c		\
 			utils/arr_free.c
@@ -50,13 +54,17 @@ $(OBJ_DIR)/mandatory/%.o: $(SRC_DIR)/%.c
 
 $(LIBFT):
 	@make --no-print-directory -C $(LIBFT_DIR) bonus
-	@cp $(LIBFT) $(LIB_DIR)
+	@mkdir -p $(LIB_DIR)
+	@cp $(LIBFT_DIR)/libft.a $(LIBFT)
 
-$(MLX):
+$(MLX_DIR):
 	@git clone https://github.com/codam-coding-college/MLX42.git $(MLX_DIR)
+
+$(MLX): $(MLX_DIR)
 	@cmake $(MLX_DIR) -B $(MLX_DIR)/build
 	@make --no-print-directory -C $(MLX_DIR)/build -j4
-	@cp $(MLX) $(LIB_DIR)
+	@mkdir -p $(LIB_DIR)
+	@cp $(MLX_DIR)/build/libmlx42.a $(MLX)
 
 ################################################################################
 
@@ -82,9 +90,9 @@ clean: .clean
 	@make --no-print-directory -C $(LIBFT_DIR) clean
 	
 fclean: .clean
-	@make --no-print-directory -C $(LIBFT_DIR) fclean
-	@echo "$(GREY)$(NAME) $(DEFAULT)| $(RED)Removing $(DEFAULT)$(NAME) and $(DEBUG_NAME)"
-	@rm -f $(NAME) $(DEBUG_NAME)
+	@make --no-print-directory -C $(LIBFT_DIR) fclean 
+	@echo "$(GREY)$(NAME) $(DEFAULT)| $(RED)Removing $(DEFAULT)$(NAME), $(DEBUG_NAME), and $(LIB_DIR)"
+	@rm -rf $(NAME) $(DEBUG_NAME) $(LIB_DIR)
 
 re: fclean all
 

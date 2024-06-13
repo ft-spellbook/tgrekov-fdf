@@ -1,36 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   points_iter.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tgrekov <tgrekov@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/20 07:21:24 by tgrekov           #+#    #+#             */
-/*   Updated: 2024/06/13 07:48:25 by tgrekov          ###   ########.fr       */
+/*   Created: 2024/06/13 06:39:50 by tgrekov           #+#    #+#             */
+/*   Updated: 2024/06/13 06:50:51 by tgrekov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <ft_printf.h>
-#include "fdf/map.h"
-#include "utils/utils.h"
+#include "map.h"
 
-t_map	read_map(char *filename);
-int		fdf(t_map map);
-
-int	main(int argc, char **argv)
+void    points_iter(t_point **arr, int width,
+    void (*func)(int y, int x, t_point *data))
 {
-	t_map	map;
-	int		status;
+    int y;
+    int x;
 
-	if (argc < 2)
-	{
-		ft_printf("%>Provide a filename containing an fdf map\n", 2);
-		return (1);
-	}
-	map = read_map(argv[1]);
-	if (!map.point)
-		return (1);
-	status = fdf(map);
-	//arr_free((void **) map.point);
-	return (status);
+    y = 0;
+    while (arr[y])
+    {
+        x = 0;
+        while (x < width)
+        {
+            func(y, x, arr[y] + x);
+            x++;
+        }
+        y++;
+    }
 }

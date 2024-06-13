@@ -6,7 +6,7 @@
 /*   By: tgrekov <tgrekov@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 07:22:24 by tgrekov           #+#    #+#             */
-/*   Updated: 2024/06/01 05:14:40 by tgrekov          ###   ########.fr       */
+/*   Updated: 2024/06/13 07:30:42 by tgrekov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 #include <ft_printf.h>
 #include <get_next_line_bonus.h>
 #include "utils/utils.h"
-#include "utils/map.h"
+#include "fdf/map.h"
 
 static int	map_file(char *filename)
 {
@@ -92,7 +92,7 @@ static void	fill_points(t_map *map, t_list *lst)
 	while (lst)
 	{
 		x = 0;
-		map->point[y] = malloc(sizeof(t_point) * map->width);
+		map->point[y] = malloc(map->width * sizeof(t_point));
 		if (!map->point[y])
 		{
 			arr_free((void **) map->point);

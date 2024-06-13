@@ -1,36 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   iso.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tgrekov <tgrekov@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/20 07:21:24 by tgrekov           #+#    #+#             */
-/*   Updated: 2024/06/13 07:48:25 by tgrekov          ###   ########.fr       */
+/*   Created: 2024/06/13 05:59:25 by tgrekov           #+#    #+#             */
+/*   Updated: 2024/06/13 07:38:05 by tgrekov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <ft_printf.h>
-#include "fdf/map.h"
-#include "utils/utils.h"
+#include <math.h>
+#include "map.h"
 
-t_map	read_map(char *filename);
-int		fdf(t_map map);
-
-int	main(int argc, char **argv)
+void    iso(int *p_3d, int *p_2d)
 {
-	t_map	map;
-	int		status;
-
-	if (argc < 2)
-	{
-		ft_printf("%>Provide a filename containing an fdf map\n", 2);
-		return (1);
-	}
-	map = read_map(argv[1]);
-	if (!map.point)
-		return (1);
-	status = fdf(map);
-	//arr_free((void **) map.point);
-	return (status);
+    p_2d[0] = (p_3d[0] - p_3d[1]) * cos(30 * M_PI / 180);
+    p_2d[1] = (p_3d[0] + p_3d[1]) * sin(30 * M_PI / 180) - p_3d[2];
 }
