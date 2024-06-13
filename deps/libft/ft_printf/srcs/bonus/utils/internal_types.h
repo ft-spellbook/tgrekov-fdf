@@ -6,7 +6,7 @@
 /*   By: tgrekov <tgrekov@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 20:40:21 by tgrekov           #+#    #+#             */
-/*   Updated: 2024/02/13 06:39:39 by tgrekov          ###   ########.fr       */
+/*   Updated: 2024/06/13 03:09:23 by tgrekov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,9 @@
  * @line /\* *********
  * @until /\* *********
  */
+
+#include <stdint.h>
+#include <unistd.h>
 
 #ifndef INTERNAL_TYPES_H
 # define INTERNAL_TYPES_H
@@ -55,6 +58,15 @@ typedef ptrdiff_t			t_ptrdiff_t;
 # else
 
 typedef long				t_ptrdiff_t;
+# endif
+
+# ifndef intmax_t
+#  ifdef __intmax_t
+typedef __intmax_t          intmax_t;
+#  else
+typedef long int            intmax_t;
+#  endif
+
 # endif
 
 #endif

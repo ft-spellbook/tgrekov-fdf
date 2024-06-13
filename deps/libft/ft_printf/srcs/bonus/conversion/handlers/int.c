@@ -6,7 +6,7 @@
 /*   By: tgrekov <tgrekov@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/01 05:18:23 by tgrekov           #+#    #+#             */
-/*   Updated: 2024/02/13 08:37:14 by tgrekov          ###   ########.fr       */
+/*   Updated: 2024/06/13 03:04:33 by tgrekov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ static t_biggest	signed_arg(va_list args, t_lenmod lenmod)
 	if (lenmod == ll)
 		return (va_arg(args, long long));
 	if (lenmod == j)
-		return (va_arg(args, intmax_t));
+		return (va_arg(args, __intmax_t));
 	if (lenmod == z)
 		return (va_arg(args, size_t));
 	if (lenmod == t)

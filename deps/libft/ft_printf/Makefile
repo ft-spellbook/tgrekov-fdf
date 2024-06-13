@@ -38,7 +38,7 @@ SRC_NAMES_BONUS =	utils/repeat_str_n.c						\
 					conversion/handlers/utils/u_print_base.c
 
 CC = cc
-FLAGS = -Wall -Wextra -Werror
+FLAGS = -Wall -Wextra -Werror -fPIE
 
 ################################################################################
 

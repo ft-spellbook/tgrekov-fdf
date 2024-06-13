@@ -52,7 +52,7 @@ SRC_NAMES_BONUS =	ft_lstadd_back_bonus.c	\
 					get_next_line_bonus.c
 
 CC = cc
-FLAGS = -Wall -Wextra -Werror
+FLAGS = -Wall -Wextra -Werror -fPIE
 
 ################################################################################
 
