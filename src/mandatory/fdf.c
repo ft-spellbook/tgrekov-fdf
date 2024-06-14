@@ -6,7 +6,7 @@
 /*   By: tgrekov <tgrekov@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 10:38:21 by tgrekov           #+#    #+#             */
-/*   Updated: 2024/06/13 08:56:17 by tgrekov          ###   ########.fr       */
+/*   Updated: 2024/06/14 10:19:19 by tgrekov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 #include "fdf/map.h"
 
 void    iso(int *p_3d, int *p_2d);
-int 	fdf_mlx(t_map map, int *offset, int *size);
+int 	fdf_mlx(t_loop_data	ld);
 
 static void	project(t_map map, int scale)
 {
@@ -59,12 +59,14 @@ static void	calc_offset(t_map map, int *offset)
 	}
 }
 
-static void	calc_size(t_map map, int *offset, int *size)
+static int	calc_size(t_map map, int *offset, int *size)
 {
 	int	x;
 	int	y;
 
 	size[0] = map.point[0][map.width - 1].projected[0] - map.point[map.height - 1][0].projected[0];
+	if (size[0] > FDF_MAX_WIDTH)
+		return (1);
 	size[1] = 0;
 	y = 0;
 	while (y < map.height)
@@ -74,11 +76,14 @@ static void	calc_size(t_map map, int *offset, int *size)
 		{
 			if (map.point[y][x].projected[1] > size[1])
 				size[1] = map.point[y][x].projected[1];
+			if ((size[1] - offset[1] + 1) > FDF_MAX_HEIGHT)
+				return (1);
 			x++;
 		}
 		y++;
 	}
 	size[1] = size[1] - offset[1] + 1;
+	return (0);
 }
 
 static int	min(int a, int b)
@@ -102,21 +107,23 @@ static int	pythagorean(int a, int b)
 
 int	fdf(t_map map)
 {
-	int			offset[2];
-	int			size[2];
+	t_loop_data	ld;
+	int	scale;
 
-	project(map, max(1, min(FDF_MAX_SCALE, min(FDF_MAX_WIDTH, FDF_MAX_HEIGHT) / pythagorean(map.width, map.height))));
-	calc_offset(map, offset);
-	calc_size(map, offset, size);
-	/*if (size[0] > FDF_MAX_WIDTH)
+	scale = max(1, min(FDF_MAX_WIDTH, FDF_MAX_HEIGHT) / pythagorean(map.width, map.height));
+	project(map, scale);
+	calc_offset(map, ld.offset);
+	calc_size(map, ld.offset, ld.size);
+	while (scale > 1)
 	{
-		ft_printf("%>Map exceeds max width with scale %d\n", 2, FDF_SCALE);
-		return (1);
+		project(map, scale);
+		calc_offset(map, ld.offset);
+		if (calc_size(map, ld.offset, ld.size))
+			scale /= 2;
+		else
+			break ;
 	}
-	if (size[1] > FDF_MAX_HEIGHT)
-	{
-		ft_printf("%>Map exceeds max height with scale %d\n", 2, FDF_SCALE);
-		return (1);
-	}*/
-	return (fdf_mlx(map, offset, size));
+	ld.cury = 0;
+	ld.map = map;
+	return (fdf_mlx(ld));
 }

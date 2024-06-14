@@ -61,7 +61,7 @@ $(MLX_DIR):
 	@git clone https://github.com/codam-coding-college/MLX42.git $(MLX_DIR)
 
 $(MLX): $(MLX_DIR)
-	@cmake $(MLX_DIR) -B $(MLX_DIR)/build
+	@env cmake -DCMAKE_CXX_COMPILER=/usr/bin/clang++ $(MLX_DIR) -B $(MLX_DIR)/build
 	@make --no-print-directory -C $(MLX_DIR)/build -j4
 	@mkdir -p $(LIB_DIR)
 	@cp $(MLX_DIR)/build/libmlx42.a $(MLX)

@@ -6,7 +6,7 @@
 /*   By: tgrekov <tgrekov@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 04:16:10 by tgrekov           #+#    #+#             */
-/*   Updated: 2024/06/13 08:52:39 by tgrekov          ###   ########.fr       */
+/*   Updated: 2024/06/14 10:01:50 by tgrekov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,8 @@
 #  define FDF_MAX_HEIGHT 2160
 # endif 
 
-# ifndef FDF_MAX_SCALE
-#  define FDF_MAX_SCALE 50
+# ifndef FDF_ROWS_PER_ITERATION
+#  define FDF_ROWS_PER_ITERATION 20
 # endif
 
 #endif 
