@@ -6,7 +6,7 @@
 /*   By: tgrekov <tgrekov@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 08:48:52 by tgrekov           #+#    #+#             */
-/*   Updated: 2024/06/14 09:49:04 by tgrekov          ###   ########.fr       */
+/*   Updated: 2024/06/15 08:45:25 by tgrekov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,9 +32,7 @@ typedef struct s_loop_data
 {
 	t_map		map;
 	mlx_image_t	*img;
-	int			offset[2];
-	int			size[2];
-	int			cury;
+	int			y;
 }	t_loop_data;	
 
 #endif
