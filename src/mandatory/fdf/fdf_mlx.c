@@ -6,7 +6,7 @@
 /*   By: tgrekov <tgrekov@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 07:32:01 by tgrekov           #+#    #+#             */
-/*   Updated: 2024/06/15 07:07:15 by tgrekov          ###   ########.fr       */
+/*   Updated: 2024/06/15 11:25:51 by tgrekov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 #include "../fdf.h"
 #include "map.h"
 
-void	draw_line(t_loop_data *d, int x1, int y1, int x2, int y2);
+void	draw_line(mlx_image_t *img, int x1, int y1, int *p2);
 void	project_map(t_loop_data *d, int *size, int *viewport);
 
 
@@ -26,39 +26,38 @@ static void	keyhook(mlx_key_data_t key_data, void *arg)
 		mlx_close_window((mlx_t *) arg);
 }
 
-static void	lines_from_point(t_loop_data *d, int x, int y)
+static void	lines_from_point(mlx_image_t *img, t_map map, int x, int y)
 {
-	t_point	**p;
-
-	p = d->map.point;
-	if (x < (d->map.width - 1))
-		draw_line(d, p[y][x].projected[0], p[y][x].projected[1], 
-			p[y][x + 1].projected[0], p[y][x + 1].projected[1]);
-	if (y < (d->map.height - 1))
-		draw_line(d, p[y][x].projected[0], p[y][x].projected[1],
-			p[y + 1][x].projected[0], p[y + 1][x].projected[1]);
+	if (x < (map.width - 1))
+		draw_line(img,
+			map.point[y][x].projected[0], map.point[y][x].projected[1],
+			map.point[y][x + 1].projected);
+	if (y < (map.height - 1))
+		draw_line(img,
+			map.point[y][x].projected[0], map.point[y][x].projected[1],
+			map.point[y + 1][x].projected);
 }
 
 static void	fdf_row(void *data)
 {
 	int			x;
-	int			starting_y;
+	int			init_y;
 	t_loop_data	*d;
 
 	d = (t_loop_data *) data;
 	if (d->y == d->map.height)
 		return ;
-	starting_y = d->y;
-	while ((d->y < d->map.height) && (d->y - starting_y) < FDF_ROWS_PER_ITERATION)
+	init_y = d->y;
+	while ((d->y < d->map.height) && (d->y - init_y) < FDF_ROWS_PER_ITERATION)
 	{
 		x = 0;
 		while (x < d->map.width)
-			lines_from_point(d, x++, d->y);
+			lines_from_point(d->img, d->map, x++, d->y);
 		d->y++;
 	}
 }
 
-static int	_fdf_mlx(mlx_t *mlx, t_loop_data d, int *size)
+static int	fdf_mlx(mlx_t *mlx, t_loop_data d, int *size)
 {
 	mlx_set_window_size(mlx, size[0], size[1]);
 	mlx_set_window_pos(mlx, 0, 0);
@@ -84,7 +83,7 @@ static int	_fdf_mlx(mlx_t *mlx, t_loop_data d, int *size)
 	return (0);
 }
 
-int	fdf_mlx(t_map map)
+int	fdf(t_map map)
 {
 	mlx_t		*mlx;
 	t_loop_data	d;
@@ -103,5 +102,5 @@ int	fdf_mlx(t_map map)
 	d.map = map;
 	project_map(&d, size, viewport);
 	d.y = 0;
-    return (_fdf_mlx(mlx, d, size));
+	return (fdf_mlx(mlx, d, size));
 }

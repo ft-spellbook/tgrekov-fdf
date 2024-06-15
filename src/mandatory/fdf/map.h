@@ -6,14 +6,14 @@
 /*   By: tgrekov <tgrekov@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 08:48:52 by tgrekov           #+#    #+#             */
-/*   Updated: 2024/06/15 08:45:25 by tgrekov          ###   ########.fr       */
+/*   Updated: 2024/06/15 11:22:07 by tgrekov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MAP_H
 # define MAP_H
 
-#include <MLX42.h>
+# include <MLX42.h>
 
 typedef struct s_point
 {

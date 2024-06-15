@@ -6,7 +6,7 @@
 /*   By: tgrekov <tgrekov@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 07:21:24 by tgrekov           #+#    #+#             */
-/*   Updated: 2024/06/15 07:06:58 by tgrekov          ###   ########.fr       */
+/*   Updated: 2024/06/15 11:29:19 by tgrekov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include "utils/utils.h"
 
 t_map	read_map(char *filename);
-int		fdf_mlx(t_map map);
+int		fdf(t_map map);
 
 int	main(int argc, char **argv)
 {
@@ -30,7 +30,7 @@ int	main(int argc, char **argv)
 	map = read_map(argv[1]);
 	if (!map.point)
 		return (1);
-	status = fdf_mlx(map);
-	//arr_free((void **) map.point);
+	status = fdf(map);
+	arr_free((void **) map.point);
 	return (status);
 }

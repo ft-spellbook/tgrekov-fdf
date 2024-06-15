@@ -6,7 +6,7 @@
 /*   By: tgrekov <tgrekov@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/15 06:23:14 by tgrekov           #+#    #+#             */
-/*   Updated: 2024/06/15 09:26:13 by tgrekov          ###   ########.fr       */
+/*   Updated: 2024/06/15 11:22:23 by tgrekov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,8 @@ static int	calc_size(t_map map, int *size, int *viewport)
 	int	x;
 	int	y;
 
-	size[0] = map.point[0][map.width - 1].projected[0] - map.point[map.height - 1][0].projected[0];
+	size[0] = map.point[0][map.width - 1].projected[0]
+		- map.point[map.height - 1][0].projected[0];
 	if (size[0] > viewport[0])
 		return (1);
 	size[1] = 0;

@@ -6,7 +6,7 @@
 /*   By: tgrekov <tgrekov@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 07:22:24 by tgrekov           #+#    #+#             */
-/*   Updated: 2024/06/13 07:30:42 by tgrekov          ###   ########.fr       */
+/*   Updated: 2024/06/15 11:37:28 by tgrekov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ static void	split_rows(int fd, t_list **lst)
 	{
 		row = get_next_line(fd);
 		if (!row && !*lst)
-			return (perror("get_next_line() failed:"));
+			return (perror("get_next_line() failed (or file is empty):"));
 		if (!row)
 			break ;
 		split = ft_split(row, ' ');
