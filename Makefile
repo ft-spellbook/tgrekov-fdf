@@ -14,10 +14,9 @@ MLX = $(LIB_DIR)/libmlx42.a
 
 SRC_NAMES =	main.c				\
 			read_map.c			\
-			fdf.c				\
-			fdf/iso.c			\
 			fdf/fdf_mlx.c		\
 			fdf/draw_line.c		\
+			fdf/project_map.c	\
 			utils/abs.c			\
 			utils/err.c			\
 			utils/arr_len.c		\
@@ -25,7 +24,7 @@ SRC_NAMES =	main.c				\
 
 CC = gcc
 CC_EXT_SRCS = -L$(LIB_DIR) $(LIBFT) -lft -lmlx42 -lm -lglfw
-FLAGS = -fPIE -I$(INC_DIR) # -Wall -Wextra -Werror
+FLAGS = -I$(INC_DIR) -Ofast# -Wall -Wextra -Werror
 DEBUG_FLAGS = -I$(INC_DIR) -g -fsanitize=address,undefined,integer
 
 ################################################################################
@@ -61,7 +60,7 @@ $(MLX_DIR):
 	@git clone https://github.com/codam-coding-college/MLX42.git $(MLX_DIR)
 
 $(MLX): $(MLX_DIR)
-	@env cmake -DCMAKE_CXX_COMPILER=/usr/bin/clang++ $(MLX_DIR) -B $(MLX_DIR)/build
+	@env cmake $(MLX_DIR) -B $(MLX_DIR)/build
 	@make --no-print-directory -C $(MLX_DIR)/build -j4
 	@mkdir -p $(LIB_DIR)
 	@cp $(MLX_DIR)/build/libmlx42.a $(MLX)
