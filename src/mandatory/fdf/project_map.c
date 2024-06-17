@@ -6,7 +6,7 @@
 /*   By: tgrekov <tgrekov@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/15 06:23:14 by tgrekov           #+#    #+#             */
-/*   Updated: 2024/06/16 19:10:10 by tgrekov          ###   ########.fr       */
+/*   Updated: 2024/06/17 15:52:48 by tgrekov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,15 +35,15 @@ static void	apply_offset(t_map map, int x_offset, int y_offset)
 
 static void	project(t_map map, int scale)
 {
-	static double	v_sides[2] = {0, 0};
+	static double	cs_30[2] = {0, 0};
 	int				x;
 	int				y;
 	int				y_offset;
 
-	if (v_sides[0] == 0)
-		v_sides[0] = cos(30 * M_PI / 180);
-	if (v_sides[1] == 0)
-		v_sides[1] = sin(30 * M_PI / 180);
+	if (cs_30[0] == 0)
+		cs_30[0] = cos(30 * M_PI / 180);
+	if (cs_30[1] == 0)
+		cs_30[1] = sin(30 * M_PI / 180);
 	y_offset = 0;
 	y = 0;
 	while (y < map.height)
@@ -51,9 +51,9 @@ static void	project(t_map map, int scale)
 		x = 0;
 		while (x < map.width)
 		{
-			map.point[y][x].projected[0] = (x - y) * scale * v_sides[0];
-			map.point[y][x].projected[1]
-				= (x + y) * scale * v_sides[1] - map.point[y][x].height * scale;
+			map.point[y][x].projected[0] = (x - y) * scale * cs_30[0];
+			map.point[y][x].projected[1] = (x + y) * scale * cs_30[1]
+				- map.point[y][x].height * scale;
 			if (map.point[y][x++].projected[1] < y_offset)
 				y_offset = map.point[y][x - 1].projected[1];
 		}
@@ -85,24 +85,28 @@ static void	calc_size(t_map map, int *size, int *viewport)
 	size[1] += 1;
 }
 
-void	project_map(t_loop_data *d, int *size, int *viewport)
+void	project_map(t_map map, mlx_t *mlx, int *size)
 {
+	int	viewport[2];
 	int	scale;
 
+	mlx_get_monitor_size(0, &viewport[0], &viewport[1]);
+	viewport[0] *= FDF_TARGET_VIEWPORT_PERCENT;
+	viewport[1] *= FDF_TARGET_VIEWPORT_PERCENT;
 	scale = viewport[1];
 	if (viewport[0] < scale)
 		scale = viewport[0];
 	scale = scale
-		/ (sqrt(d->map.width * d->map.width + d->map.height * d->map.height)
-			* atan(sin(45 * M_PI / 180)));
+		/ (sqrt(map.width * map.width + map.height * map.height)
+			* atan(sin(30 * M_PI / 180)));
 	if (scale < 1)
 		scale = 1;
-	project(d->map, scale);
-	calc_size(d->map, size, viewport);
+	project(map, scale);
+	calc_size(map, size, viewport);
 	while (size[0] > viewport[0] && size[1] > viewport[1] && scale > 1)
 	{
 		scale--;
-		project(d->map, scale);
-		calc_size(d->map, size, viewport);
+		project(map, scale);
+		calc_size(map, size, viewport);
 	}
 }

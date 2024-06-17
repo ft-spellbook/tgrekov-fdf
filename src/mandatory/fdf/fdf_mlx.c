@@ -6,7 +6,7 @@
 /*   By: tgrekov <tgrekov@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 07:32:01 by tgrekov           #+#    #+#             */
-/*   Updated: 2024/06/16 17:50:51 by tgrekov          ###   ########.fr       */
+/*   Updated: 2024/06/17 15:51:11 by tgrekov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 #include "map.h"
 
 void	draw_line(mlx_image_t *img, int x1, int y1, int *p2);
-void	project_map(t_loop_data *d, int *size, int *viewport);
+void	project_map(t_map map, mlx_t *mlx, int *size);
 
 
 static void	keyhook(mlx_key_data_t key_data, void *arg)
@@ -64,31 +64,33 @@ static int	fdf_mlx(mlx_t *mlx, t_loop_data d, int *size)
 	d.img = mlx_new_image(mlx, size[0], size[1]);
 	if (!d.img)
 	{
-		ft_printf("%>mlx_new_image() failed:%s\n", 2, mlx_strerror(mlx_errno));
-		mlx_terminate(mlx);
+		ft_printf("%>mlx_new_image() failed: %s\n", 2, mlx_strerror(mlx_errno));
 		return (1);
 	}
 	if (mlx_image_to_window(mlx, d.img, 0, 0) == -1)
 	{
-		ft_printf("%>mlx_image_to_window() failed:%s\n", 2, mlx_strerror(mlx_errno));
+		ft_printf("%>mlx_image_to_window() failed: %s\n",
+			2, mlx_strerror(mlx_errno));
 		mlx_delete_image(mlx, d.img);
-		mlx_terminate(mlx);
 		return (1);
 	}
 	mlx_loop_hook(mlx, fdf_row, &d);
 	mlx_key_hook(mlx, keyhook, mlx);
+	d.y = 0;
 	mlx_loop(mlx);
 	mlx_delete_image(mlx, d.img);
-	mlx_terminate(mlx);
-	return (0);
+	if (mlx_errno)
+		ft_printf("%>MLX error with unknown source: %s\n",
+			2, mlx_strerror(mlx_errno));
+	return (mlx_errno);
 }
 
 int	fdf(t_map map)
 {
 	mlx_t		*mlx;
 	t_loop_data	d;
-	int			viewport[2];
 	int			size[2];
+	int			status;
 
 	mlx = mlx_init(1, 1, FDF_WINDOW_TITLE, 0);
 	if (!mlx)
@@ -96,11 +98,9 @@ int	fdf(t_map map)
 		ft_printf("%>mlx_init() failed:%s\n", 2, mlx_strerror(mlx_errno));
 		return (0);
 	}
-	mlx_get_monitor_size(0, &viewport[0], &viewport[1]);
-	viewport[0] *= 0.95;
-	viewport[1] *= 0.95;
 	d.map = map;
-	project_map(&d, size, viewport);
-	d.y = 0;
-	return (fdf_mlx(mlx, d, size));
+	project_map(map, mlx, size);
+	status = fdf_mlx(mlx, d, size);
+	mlx_terminate(mlx);
+	return (status);
 }
