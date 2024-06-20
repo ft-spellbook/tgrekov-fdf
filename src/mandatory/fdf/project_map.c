@@ -6,7 +6,7 @@
 /*   By: tgrekov <tgrekov@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/15 06:23:14 by tgrekov           #+#    #+#             */
-/*   Updated: 2024/06/17 15:52:48 by tgrekov          ###   ########.fr       */
+/*   Updated: 2024/06/20 22:01:42 by tgrekov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ static void	project(t_map map, int scale)
 	apply_offset(map, map.point[map.height - 1][0].projected[0], y_offset);
 }
 
-static void	calc_size(t_map map, int *size, int *viewport)
+static void	calc_size(t_map map, int *size)
 {
 	int	x;
 	int	y;
@@ -85,7 +85,7 @@ static void	calc_size(t_map map, int *size, int *viewport)
 	size[1] += 1;
 }
 
-void	project_map(t_map map, mlx_t *mlx, int *size)
+void	project_map(t_map map, int *size)
 {
 	int	viewport[2];
 	int	scale;
@@ -102,11 +102,11 @@ void	project_map(t_map map, mlx_t *mlx, int *size)
 	if (scale < 1)
 		scale = 1;
 	project(map, scale);
-	calc_size(map, size, viewport);
+	calc_size(map, size);
 	while (size[0] > viewport[0] && size[1] > viewport[1] && scale > 1)
 	{
 		scale--;
 		project(map, scale);
-		calc_size(map, size, viewport);
+		calc_size(map, size);
 	}
 }

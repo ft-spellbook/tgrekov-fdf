@@ -51,7 +51,7 @@ SRC_NAMES_BONUS =	ft_lstadd_back_bonus.c	\
 					ft_lstsize_bonus.c		\
 					get_next_line_bonus.c
 
-CC = gcc
+CC = cc
 FLAGS = -Wall -Wextra -Werror -Ofast -Wno-unused-result
 
 ################################################################################

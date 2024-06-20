@@ -22,9 +22,9 @@ SRC_NAMES =	main.c				\
 			utils/arr_len.c		\
 			utils/arr_free.c
 
-CC = gcc
+CC = cc
 CC_EXT_SRCS = -L$(LIB_DIR) $(LIBFT) -lft -lmlx42 -lm -lglfw
-FLAGS = -I$(INC_DIR) -Ofast# -Wall -Wextra -Werror
+FLAGS = -I$(INC_DIR) -Ofast -Wall -Wextra -Werror
 DEBUG_FLAGS = -I$(INC_DIR) -g -fsanitize=address,undefined,integer
 
 ################################################################################

@@ -6,7 +6,7 @@
 /*   By: tgrekov <tgrekov@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 07:32:01 by tgrekov           #+#    #+#             */
-/*   Updated: 2024/06/17 15:51:11 by tgrekov          ###   ########.fr       */
+/*   Updated: 2024/06/20 22:32:00 by tgrekov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,7 @@
 #include "map.h"
 
 void	draw_line(mlx_image_t *img, int x1, int y1, int *p2);
-void	project_map(t_map map, mlx_t *mlx, int *size);
-
+void	project_map(t_map map, int *size);
 
 static void	keyhook(mlx_key_data_t key_data, void *arg)
 {
@@ -99,7 +98,7 @@ int	fdf(t_map map)
 		return (0);
 	}
 	d.map = map;
-	project_map(map, mlx, size);
+	project_map(map, size);
 	status = fdf_mlx(mlx, d, size);
 	mlx_terminate(mlx);
 	return (status);
