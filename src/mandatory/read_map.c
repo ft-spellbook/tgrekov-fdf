@@ -6,7 +6,7 @@
 /*   By: tgrekov <tgrekov@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 07:22:24 by tgrekov           #+#    #+#             */
-/*   Updated: 2024/06/21 02:19:12 by tgrekov          ###   ########.fr       */
+/*   Updated: 2024/06/21 02:31:54 by tgrekov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,8 +64,8 @@ static void	split_rows(int fd, t_list **lst)
  * @brief Allocate @p map @ref s_point "points" and set height values
  * from @p lst
  * 
- * @param map
- * @param lst 
+ * @param[in, out] map
+ * @param[in] lst 
  */
 static void	fill_points(t_map *map, t_list *lst)
 {
@@ -95,6 +95,12 @@ static void	fill_points(t_map *map, t_list *lst)
 	}
 }
 
+/**
+ * @brief Initialize @ref s_map "map" from an fdf map file pointed to by @p fd
+ * 
+ * @param[in] fd 
+ * @retval t_map 
+ */
 t_map	read_map(int fd)
 {
 	t_map	map;

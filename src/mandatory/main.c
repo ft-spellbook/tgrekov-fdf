@@ -6,9 +6,16 @@
 /*   By: tgrekov <tgrekov@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 07:21:24 by tgrekov           #+#    #+#             */
-/*   Updated: 2024/06/21 01:28:33 by tgrekov          ###   ########.fr       */
+/*   Updated: 2024/06/21 02:33:24 by tgrekov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+/**
+ * @file main.c
+ * @dontinclude main.c
+ * @line /\* *********
+ * @until /\* *********
+ */
 
 #include <fcntl.h>
 #include <stdio.h>
@@ -20,6 +27,12 @@
 t_map	read_map(int fd);
 int		fdf(t_map map);
 
+/**
+ * @brief Validate filename and open fdf map file
+ * 
+ * @param filename 
+ * @retval int 
+ */
 static int	open_map(char *filename)
 {
 	int	len;

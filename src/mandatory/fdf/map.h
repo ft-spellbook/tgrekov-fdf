@@ -6,15 +6,26 @@
 /*   By: tgrekov <tgrekov@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 08:48:52 by tgrekov           #+#    #+#             */
-/*   Updated: 2024/06/15 11:22:07 by tgrekov          ###   ########.fr       */
+/*   Updated: 2024/06/21 02:53:51 by tgrekov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+/**
+ * @file map.h
+ * @dontinclude map.h
+ * @line /\* *********
+ * @until /\* *********
+ */
 
 #ifndef MAP_H
 # define MAP_H
 
 # include <MLX42.h>
 
+/**
+ * @brief 
+ * 
+ */
 typedef struct s_point
 {
 	int	height;
