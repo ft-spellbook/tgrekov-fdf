@@ -6,7 +6,7 @@
 /*   By: tgrekov <tgrekov@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 15:05:36 by tgrekov           #+#    #+#             */
-/*   Updated: 2024/06/24 04:49:14 by tgrekov          ###   ########.fr       */
+/*   Updated: 2024/05/02 10:28:07 by tgrekov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,6 @@
  */
 
 #include <stdio.h>
-#include <errno.h>
-#include <ft_printf.h>
 
 /**
  * @brief Wrapper around <tt>perror()</tt> that always returns @p retval.
@@ -30,9 +28,6 @@
  */
 void	*err(const char *str, void *retval)
 {
-	if (!errno)
-		ft_printf("%>%s\n", 2, str);
-	else
-		perror(str);
+	perror(str);
 	return (retval);
 }
