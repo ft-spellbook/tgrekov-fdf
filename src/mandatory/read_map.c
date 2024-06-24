@@ -6,7 +6,7 @@
 /*   By: tgrekov <tgrekov@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 07:22:24 by tgrekov           #+#    #+#             */
-/*   Updated: 2024/06/21 02:31:54 by tgrekov          ###   ########.fr       */
+/*   Updated: 2024/06/24 04:37:10 by tgrekov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,11 +19,41 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <errno.h>
 #include <libft.h>
 #include <ft_printf.h>
 #include <get_next_line_bonus.h>
 #include "utils/utils.h"
 #include "fdf/map.h"
+
+/**
+ * @brief Remove trailing newline from row or print appropriate error message
+ * 
+ * @param[in] row 
+ * @param[in] lst Linked list where each node contains an array of strings
+ * with height,color for that index of the row
+ * @retval char* 
+ */
+static char	*prep_row(char *row, t_list **lst)
+{
+	int		row_len;
+
+	if (!row)
+	{
+		if (!*lst)
+		{
+			if (!errno)
+				ft_printf("%>File is empty\n", 2);
+			else
+				perror("get_next_line()");
+		}
+		return (0);
+	}
+	row_len = ft_strlen(row);
+	if (row[row_len - 1] == '\n')
+		row[row_len - 1] = 0;
+	return (row);
+}
 
 /**
  * @brief Read rows from @p fd and place them into @p lst nodes, split on spaces
@@ -41,20 +71,20 @@ static void	split_rows(int fd, t_list **lst)
 	*lst = 0;
 	while (1)
 	{
-		row = get_next_line(fd);
+		row = prep_row(get_next_line(fd), lst);
 		if (!row && !*lst)
-			return (perror("get_next_line() failed (or file is empty): "));
+			return ;
 		if (!row)
 			break ;
 		split = ft_split(row, ' ');
 		free(row);
 		if (!split)
-			return (perror("malloc(): "));
+			return (perror("malloc()"));
 		new_row = ft_lstnew(split);
 		if (!new_row)
 		{
 			ft_lstclear(lst, free);
-			return (perror("malloc(): "));
+			return (perror("malloc()"));
 		}
 		ft_lstadd_back(lst, new_row);
 	}
@@ -86,7 +116,7 @@ static void	fill_points(t_map *map, t_list *lst)
 		if (!map->point[y])
 		{
 			arr_free((void ***) &map->point);
-			return (perror("malloc() failed:"));
+			return (perror("malloc() failed"));
 		}
 		while (x--)
 			map->point[y][x].height = ft_atoi(((char **) lst->content)[x]);
@@ -110,7 +140,7 @@ t_map	read_map(int fd)
 	split_rows(fd, &lst);
 	if (close(fd) == -1)
 	{
-		perror("close(): ");
+		perror("close()");
 		return (map);
 	}
 	if (!lst)
@@ -120,7 +150,7 @@ t_map	read_map(int fd)
 	map.point = ft_calloc(map.height + 1, sizeof(t_point **));
 	if (!map.point)
 	{
-		perror("malloc(): ");
+		perror("malloc()");
 		return (map);
 	}
 	fill_points(&map, lst);
