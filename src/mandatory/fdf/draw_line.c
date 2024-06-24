@@ -6,13 +6,22 @@
 /*   By: tgrekov <tgrekov@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 06:17:39 by tgrekov           #+#    #+#             */
-/*   Updated: 2024/06/15 11:21:46 by tgrekov          ###   ########.fr       */
+/*   Updated: 2024/06/24 05:08:20 by tgrekov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <MLX42.h>
 #include "../utils/utils.h"
 
+/**
+ * @brief Multi-directional implementation of the
+ * Bresenham incremental error line drawing algorithm
+ * 
+ * @param img Mlx image pointer
+ * @param x1 Starting x position
+ * @param y1 Starting y position
+ * @param p2 Ending [x, y] position
+ */
 void	draw_line(mlx_image_t *img, int x1, int y1, int *p2)
 {
 	int	dx;

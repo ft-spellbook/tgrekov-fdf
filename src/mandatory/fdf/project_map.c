@@ -6,7 +6,7 @@
 /*   By: tgrekov <tgrekov@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/15 06:23:14 by tgrekov           #+#    #+#             */
-/*   Updated: 2024/06/24 04:05:49 by tgrekov          ###   ########.fr       */
+/*   Updated: 2024/06/24 05:06:35 by tgrekov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,13 @@
 #include "map.h"
 #include <ft_printf.h>
 
+/**
+ * @brief Apply offset to projected coordinates
+ * 
+ * @param map 
+ * @param x_offset Offset required for left-most x to be zero
+ * @param y_offset Offset required for top-most y to be zero
+ */
 static void	apply_offset(t_map map, int x_offset, int y_offset)
 {
 	int	x;
@@ -34,6 +41,12 @@ static void	apply_offset(t_map map, int x_offset, int y_offset)
 	}
 }
 
+/**
+ * @brief Generate coordinates from map input and scale via isometric projection
+ * 
+ * @param map 
+ * @param scale 
+ */
 static void	project(t_map map, int scale)
 {
 	static double	cs_30[2] = {0, 0};
@@ -63,6 +76,12 @@ static void	project(t_map map, int scale)
 	apply_offset(map, map.point[map.height - 1][0].projected[0], y_offset);
 }
 
+/**
+ * @brief Get boundaries of projected map
+ * 
+ * @param map 
+ * @param size 
+ */
 static void	calc_size(t_map map, int *size)
 {
 	int	x;
@@ -86,6 +105,14 @@ static void	calc_size(t_map map, int *size)
 	size[1] += 1;
 }
 
+/**
+ * @brief Project map and attempt to automatically scale to viewport.
+ * Will not perform sub-pixel scaling, so if image is too large to fit
+ * at 1:1 scale, the window will be allowed to extend outside the viewport.
+ * 
+ * @param map 
+ * @param size 
+ */
 void	project_map(t_map map, int *size)
 {
 	int	viewport[2];

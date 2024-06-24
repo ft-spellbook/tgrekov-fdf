@@ -6,10 +6,16 @@
 /*   By: tgrekov <tgrekov@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 08:18:39 by tgrekov           #+#    #+#             */
-/*   Updated: 2024/06/20 22:02:22 by tgrekov          ###   ########.fr       */
+/*   Updated: 2024/06/24 05:09:12 by tgrekov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+/**
+ * @brief Get absolute value of @p n
+ * 
+ * @param n 
+ * @retval int 
+ */
 int	abs(int n)
 {
 	if (n < 0)
