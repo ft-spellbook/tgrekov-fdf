@@ -6,7 +6,7 @@
 /*   By: tgrekov <tgrekov@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 07:32:01 by tgrekov           #+#    #+#             */
-/*   Updated: 2024/06/24 06:12:43 by tgrekov          ###   ########.fr       */
+/*   Updated: 2024/06/24 08:50:27 by tgrekov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@
 #include "map.h"
 
 void	draw_line(mlx_image_t *img, int x1, int y1, int *p2);
-void	project_map(t_map map, int *size);
+int		project_map(t_map map, int *size);
 
 /**
  * @brief Runs when a key is pressed to check whether the escape key was used,
@@ -142,8 +142,13 @@ int	fdf(t_map map)
 		return (0);
 	}
 	d.map = map;
-	project_map(map, size);
-	status = fdf_mlx(mlx, d, size);
+	if (project_map(map, size))
+	{
+		ft_printf("%>Map too big\n", 2);
+		status = 1;
+	}
+	else
+		status = fdf_mlx(mlx, d, size);
 	mlx_terminate(mlx);
 	return (status);
 }
