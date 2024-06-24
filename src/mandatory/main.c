@@ -6,7 +6,7 @@
 /*   By: tgrekov <tgrekov@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 07:21:24 by tgrekov           #+#    #+#             */
-/*   Updated: 2024/06/24 04:17:24 by tgrekov          ###   ########.fr       */
+/*   Updated: 2024/06/24 06:07:35 by tgrekov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,11 @@ static int	open_map(char *filename)
 	return (fd);
 }
 
+/**
+ * @param argc 
+ * @param argv 
+ * @retval int 
+ */
 int	main(int argc, char **argv)
 {
 	t_map	map;
