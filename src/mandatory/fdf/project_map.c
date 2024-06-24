@@ -6,7 +6,7 @@
 /*   By: tgrekov <tgrekov@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/15 06:23:14 by tgrekov           #+#    #+#             */
-/*   Updated: 2024/06/24 06:00:30 by tgrekov          ###   ########.fr       */
+/*   Updated: 2024/06/24 08:54:11 by tgrekov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@
 #include <math.h>
 #include "../fdf.h"
 #include "map.h"
-#include <ft_printf.h>
 
 /**
  * @brief Apply offset to projected coordinates
@@ -114,13 +113,12 @@ static void	calc_size(t_map map, int *size)
 
 /**
  * @brief Project map and attempt to automatically scale to viewport.
- * Will not perform sub-pixel scaling, so if image is too large to fit
- * at 1:1 scale, the window will be allowed to extend outside the viewport.
  * 
  * @param map 
- * @param size 
+ * @param size
+ * @retval int 0 if scaling was successful, 1 if map was too large
  */
-void	project_map(t_map map, int *size)
+int	project_map(t_map map, int *size)
 {
 	int	viewport[2];
 	int	scale;
@@ -138,10 +136,12 @@ void	project_map(t_map map, int *size)
 		scale = 1;
 	project(map, scale);
 	calc_size(map, size);
-	while ((size[0] > viewport[0] || size[1] > viewport[1]) && scale > 1)
+	while (size[0] > viewport[0] || size[1] > viewport[1])
 	{
-		scale--;
-		project(map, scale);
+		if (scale == 1)
+			return (1);
+		project(map, --scale);
 		calc_size(map, size);
 	}
+	return (0);
 }

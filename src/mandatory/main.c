@@ -6,7 +6,7 @@
 /*   By: tgrekov <tgrekov@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 07:21:24 by tgrekov           #+#    #+#             */
-/*   Updated: 2024/06/24 06:07:35 by tgrekov          ###   ########.fr       */
+/*   Updated: 2024/06/24 08:50:00 by tgrekov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,14 @@ int	main(int argc, char **argv)
 	map = read_map(fd);
 	if (!map.point)
 		return (1);
+	if (close(fd) == -1)
+	{
+		perror("close()");
+		if (map.point)
+			arr_free((void **) map.point);
+		return (1);
+	}
 	status = fdf(map);
-	arr_free((void ***) &map.point);
+	arr_free((void **) map.point);
 	return (status);
 }

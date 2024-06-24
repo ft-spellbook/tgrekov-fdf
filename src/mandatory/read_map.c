@@ -6,7 +6,7 @@
 /*   By: tgrekov <tgrekov@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 07:22:24 by tgrekov           #+#    #+#             */
-/*   Updated: 2024/06/24 04:51:25 by tgrekov          ###   ########.fr       */
+/*   Updated: 2024/06/24 08:55:47 by tgrekov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,17 @@
 #include <get_next_line_bonus.h>
 #include "utils/utils.h"
 #include "fdf/map.h"
+
+/**
+ * @brief Wrapper around @ref arr_free "arr_free" for use with
+ * @ref ft_lstclear "ft_lstclear"
+ * 
+ * @param arr 
+ */
+static void	lst_arr_free(void *arr)
+{
+	arr_free((void **) arr);
+}
 
 /**
  * @brief Remove trailing newline from row or print appropriate error message
@@ -83,7 +94,7 @@ static void	split_rows(int fd, t_list **lst)
 		new_row = ft_lstnew(split);
 		if (!new_row)
 		{
-			ft_lstclear(lst, free);
+			ft_lstclear(lst, lst_arr_free);
 			return (perror("malloc()"));
 		}
 		ft_lstadd_back(lst, new_row);
@@ -96,8 +107,9 @@ static void	split_rows(int fd, t_list **lst)
  * 
  * @param[in, out] map
  * @param[in] lst 
+ * @retval int 0 on success, positive number greater than zero otherwise
  */
-static void	fill_points(t_map *map, t_list *lst)
+static int	fill_points(t_map *map, t_list *lst)
 {
 	int	x;
 	int	y;
@@ -109,20 +121,21 @@ static void	fill_points(t_map *map, t_list *lst)
 		if (map->width != x)
 		{
 			ft_printf("%>Inconsistent width on row %d\n", 2, y + 1);
-			arr_free((void ***) &map->point);
-			return ;
+			arr_free((void **) map->point);
+			return (1);
 		}
 		map->point[y] = malloc(map->width * sizeof(t_point));
 		if (!map->point[y])
 		{
-			arr_free((void ***) &map->point);
-			return (perror("malloc() failed"));
+			arr_free((void **) map->point);
+			return (*(int *) err("malloc() failed", &x));
 		}
 		while (x--)
 			map->point[y][x].height = ft_atoi(((char **) lst->content)[x]);
 		y++;
 		lst = lst->next;
 	}
+	return (0);
 }
 
 /**
@@ -138,18 +151,23 @@ t_map	read_map(int fd)
 
 	map.point = 0;
 	split_rows(fd, &lst);
-	if (close(fd) == -1)
-		return (*(t_map *) err("close()", (void *) &map));
 	if (!lst)
 		return (map);
 	map.height = ft_lstsize(lst);
 	map.width = arr_len(lst->content);
 	if (map.height == 1 && map.width == 1)
+	{
+		ft_lstclear(&lst, lst_arr_free);
 		return (*(t_map *) err("Cannot draw line from 1 point", (void *) &map));
+	}
 	map.point = ft_calloc(map.height + 1, sizeof(t_point **));
 	if (!map.point)
+	{
+		ft_lstclear(&lst, lst_arr_free);
 		return (*(t_map *) err("malloc()", (void *) &map));
-	fill_points(&map, lst);
-	ft_lstclear(&lst, free);
+	}
+	if (fill_points(&map, lst))
+		map.point = 0;
+	ft_lstclear(&lst, lst_arr_free);
 	return (map);
 }
