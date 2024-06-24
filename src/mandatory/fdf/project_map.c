@@ -6,13 +6,14 @@
 /*   By: tgrekov <tgrekov@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/15 06:23:14 by tgrekov           #+#    #+#             */
-/*   Updated: 2024/06/20 22:01:42 by tgrekov          ###   ########.fr       */
+/*   Updated: 2024/06/24 04:05:49 by tgrekov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <math.h>
 #include "../fdf.h"
 #include "map.h"
+#include <ft_printf.h>
 
 static void	apply_offset(t_map map, int x_offset, int y_offset)
 {
@@ -103,7 +104,7 @@ void	project_map(t_map map, int *size)
 		scale = 1;
 	project(map, scale);
 	calc_size(map, size);
-	while (size[0] > viewport[0] && size[1] > viewport[1] && scale > 1)
+	while ((size[0] > viewport[0] || size[1] > viewport[1]) && scale > 1)
 	{
 		scale--;
 		project(map, scale);
