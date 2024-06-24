@@ -2,14 +2,11 @@
  * @page project_summary Project Summary
  * @htmlonly
  * <div id="author_date">
- * tgrekov 2024/05/02 2024/05/02
+ * tgrekov 2024/06/24 2024/06/24
  * </div>
  * @endhtmlonly
  *
- * The documentation for this project focuses on the bonus, and will also
- * document mandatory parts reused in the bonus.
- *
  * Quick links:  
  * @ref Makefile  
- * @ref srcs/bonus/main.c
+ * @ref srcs/mandatory/main.c
  */
