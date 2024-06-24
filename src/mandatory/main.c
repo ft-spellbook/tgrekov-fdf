@@ -6,7 +6,7 @@
 /*   By: tgrekov <tgrekov@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 07:21:24 by tgrekov           #+#    #+#             */
-/*   Updated: 2024/06/21 02:33:24 by tgrekov          ###   ########.fr       */
+/*   Updated: 2024/06/24 04:17:24 by tgrekov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ static int	open_map(char *filename)
 	}
 	fd = open(filename, O_RDONLY);
 	if (fd == -1)
-		perror("open(): ");
+		perror("open()");
 	return (fd);
 }
 
