@@ -6,7 +6,7 @@
 /*   By: tgrekov <tgrekov@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 07:32:01 by tgrekov           #+#    #+#             */
-/*   Updated: 2024/06/24 06:00:24 by tgrekov          ###   ########.fr       */
+/*   Updated: 2024/06/24 06:12:43 by tgrekov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ static void	lines_from_point(mlx_image_t *img, t_map map, int x, int y)
 /**
  * @brief Draw rows in between frames if the image isn't complete
  * 
- * @param data @ref t_loop_data "loop data"
+ * @param data @ref s_loop_data "loop data"
  */
 static void	fdf_row(void *data)
 {
