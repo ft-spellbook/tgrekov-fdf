@@ -6,9 +6,16 @@
 /*   By: tgrekov <tgrekov@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/15 06:23:14 by tgrekov           #+#    #+#             */
-/*   Updated: 2024/06/24 05:06:35 by tgrekov          ###   ########.fr       */
+/*   Updated: 2024/06/24 06:00:30 by tgrekov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+/**
+ * @file project_map.c
+ * @dontinclude project_map.c
+ * @line /\* *********
+ * @until /\* *********
+ */
 
 #include <math.h>
 #include "../fdf.h"

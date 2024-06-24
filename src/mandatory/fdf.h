@@ -6,9 +6,16 @@
 /*   By: tgrekov <tgrekov@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 04:16:10 by tgrekov           #+#    #+#             */
-/*   Updated: 2024/06/17 15:53:03 by tgrekov          ###   ########.fr       */
+/*   Updated: 2024/06/24 06:01:02 by tgrekov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+/**
+ * @file fdf.h
+ * @dontinclude fdf.h
+ * @line /\* *********
+ * @until /\* *********
+ */
 
 #ifndef FDF_H
 # define FDF_H

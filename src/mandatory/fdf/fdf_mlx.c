@@ -6,9 +6,16 @@
 /*   By: tgrekov <tgrekov@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 07:32:01 by tgrekov           #+#    #+#             */
-/*   Updated: 2024/06/24 05:02:36 by tgrekov          ###   ########.fr       */
+/*   Updated: 2024/06/24 06:00:24 by tgrekov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+/**
+ * @file fdf_mlx.c
+ * @dontinclude fdf_mlx.c
+ * @line /\* *********
+ * @until /\* *********
+ */
 
 #include <stdlib.h>
 #include <MLX42.h>

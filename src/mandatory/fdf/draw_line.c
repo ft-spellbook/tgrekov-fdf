@@ -6,9 +6,16 @@
 /*   By: tgrekov <tgrekov@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 06:17:39 by tgrekov           #+#    #+#             */
-/*   Updated: 2024/06/24 05:08:20 by tgrekov          ###   ########.fr       */
+/*   Updated: 2024/06/24 06:00:19 by tgrekov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+/**
+ * @file draw_line.c
+ * @dontinclude draw_line.c
+ * @line /\* *********
+ * @until /\* *********
+ */
 
 #include <MLX42.h>
 #include "../utils/utils.h"
