@@ -6,7 +6,7 @@
 /*   By: tgrekov <tgrekov@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 07:22:24 by tgrekov           #+#    #+#             */
-/*   Updated: 2024/06/24 04:37:10 by tgrekov          ###   ########.fr       */
+/*   Updated: 2024/06/24 04:51:25 by tgrekov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,20 +139,16 @@ t_map	read_map(int fd)
 	map.point = 0;
 	split_rows(fd, &lst);
 	if (close(fd) == -1)
-	{
-		perror("close()");
-		return (map);
-	}
+		return (*(t_map *) err("close()", (void *) &map));
 	if (!lst)
 		return (map);
 	map.height = ft_lstsize(lst);
 	map.width = arr_len(lst->content);
+	if (map.height == 1 && map.width == 1)
+		return (*(t_map *) err("Cannot draw line from 1 point", (void *) &map));
 	map.point = ft_calloc(map.height + 1, sizeof(t_point **));
 	if (!map.point)
-	{
-		perror("malloc()");
-		return (map);
-	}
+		return (*(t_map *) err("malloc()", (void *) &map));
 	fill_points(&map, lst);
 	ft_lstclear(&lst, free);
 	return (map);
